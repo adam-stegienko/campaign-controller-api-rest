@@ -1,3 +1,40 @@
+# Configuration files (use environment-specific configs)
 config/
 application*.properties
 application-local.yaml
+
+# Build artifacts
+target/
+*.jar
+*.war
+*.class
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Maven wrapper (if using system Maven)
+.mvn/
+mvnw
+mvnw.cmd
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Don't ignore maven-settings.xml if it exists (for CI/CD)
+!maven-settings.xml

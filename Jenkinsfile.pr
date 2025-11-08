@@ -63,7 +63,21 @@ pipeline {
                 }
             }
             steps {
-                sh "docker build --build-arg APP_VERSION=${APP_VERSION} -t ${env.DOCKER_REGISTRY}/${env.APP_NAME}:${APP_VERSION} ."
+                script {
+                    // Copy Maven settings for Docker build (Jenkins has this file)
+                    sh 'cp ~/.m2/settings.xml maven-settings.xml'
+                    
+                    // Build Docker image (tests already passed in SonarQube stage)
+                    sh """
+                        docker build \
+                        --build-arg APP_VERSION=${env.APP_VERSION} \
+                        --build-arg SKIP_TESTS=true \
+                        -t ${env.DOCKER_REGISTRY}/${env.APP_NAME}:${env.APP_VERSION} .
+                    """
+                    
+                    // Clean up settings file
+                    sh 'rm -f maven-settings.xml'
+                }
             }
         }
 

@@ -1,6 +1,7 @@
 config/
 application*.properties
 application-local.yaml
+maven-settings.xml
 
 ##############################
 ## Java
