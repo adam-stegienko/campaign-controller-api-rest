@@ -1,20 +1,30 @@
-def calculateVersion(latestTag) {
-    def (major, minor, patch) = latestTag.tokenize('.')
+def getCurrentVersionFromPom() {
+    def pomXml = readFile('pom.xml')
+    def matcher = pomXml =~ /<version>(.+?)<\/version>/
+    return matcher[0][1]
+}
+
+def calculateReleaseVersion(currentVersion) {
+    // Remove -SNAPSHOT suffix to get the release version
+    def baseVersion = currentVersion.replace('-SNAPSHOT', '')
+    def (major, minor, patch) = baseVersion.tokenize('.')
 
     // Fetch the latest commit message
     def commitMessage = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 
-    // Increment the version based on the commit message
-    if (commitMessage.contains('major')) {
+    // For snapshot versions, we can release as-is or increment based on commit message
+    if (commitMessage.contains('[major]')) {
         major = major.toInteger() + 1
         minor = '0'
         patch = '0'
-    } else if (commitMessage.contains('minor')) {
+    } else if (commitMessage.contains('[minor]')) {
         minor = minor.toInteger() + 1
         patch = '0'
-    } else {
+    } else if (!currentVersion.contains('-SNAPSHOT')) {
+        // If current version is not snapshot, increment patch
         patch = patch.toInteger() + 1
     }
+    // If it's already a snapshot and no explicit increment, use the base version
 
     return "${major}.${minor}.${patch}"
 }
@@ -86,24 +96,42 @@ pipeline {
         stage('Calculate Version') {
             steps {
                 script {
-                    def latestTag = '0.0.0'
-                    try {
-                        latestTag = sh(returnStdout: true, script: 'git tag | sort -Vr | head -n 1').trim()
-                    } catch (Exception e) {}
-                    env.APP_VERSION = calculateVersion(latestTag)
+                    // Get current version from pom.xml
+                    def currentVersion = getCurrentVersionFromPom()
+                    env.CURRENT_VERSION = currentVersion
+                    
+                    // Calculate release version
+                    env.APP_VERSION = calculateReleaseVersion(currentVersion)
 
-                    // Check if the latest commit already has a tag
+                    // Check if the latest commit already has a tag or contains [skip ci]
+                    def commitMessage = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
                     def latestCommitTag = ''
                     try {
                         latestCommitTag = sh(returnStdout: true, script: 'git tag --contains HEAD').trim()
                     } catch (Exception e) {}
-                    if (latestCommitTag) {
+                    
+                    if (latestCommitTag || commitMessage.contains('[skip ci]')) {
                         DUPLICATED_TAG = 'true'
-                        sh "echo 'Tag ${latestCommitTag} already exists for the latest commit. DUPLICATED_TAG env var is set to: '${DUPLICATED_TAG}"
+                        sh "echo 'Tag ${latestCommitTag} already exists for the latest commit or commit contains [skip ci]. DUPLICATED_TAG env var is set to: '${DUPLICATED_TAG}"
                     } else {
-                        sh "echo ${latestTag} '->' ${env.APP_VERSION}"
+                        sh "echo 'Current version: ${env.CURRENT_VERSION}'"
+                        sh "echo 'Release version: ${env.APP_VERSION}'"
                         sh "echo DUPLICATED_TAG: ${DUPLICATED_TAG}"
                     }
+                }
+            }
+        }
+
+        stage('Set Release Version for Build') {
+            when {
+                expression {
+                    return DUPLICATED_TAG == 'false'
+                }
+            }
+            steps {
+                withMaven() {
+                    sh "mvn versions:set -DnewVersion=${env.APP_VERSION} -DgenerateBackupPoms=false"
+                    sh "echo 'Set version to ${env.APP_VERSION} for build (not committed)'"
                 }
             }
         }
@@ -112,7 +140,6 @@ pipeline {
             steps {
                 withMaven() {
                     withSonarQubeEnv(env.SONAR_SERVER) {
-                        sh "mvn versions:set -DnewVersion=${env.APP_VERSION}"
                         sh "mvn clean verify sonar:sonar -Dsonar.projectKey=${env.SONAR_PROJECT_KEY} -Dsonar.projectName='${env.SONAR_PROJECT_NAME}'"
                     }
                 }
@@ -178,14 +205,13 @@ pipeline {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') {
                     withMaven() {
-                        sh "mvn versions:set -DnewVersion=${env.APP_VERSION}"
                         sh 'mvn clean deploy'
                     }
                 }
             }
         }
 
-        stage('Update pom.xml version, Tag, and Push to Git') {
+        stage('Tag Release') {
             when {
                 expression {
                     return currentBuild.currentResult == 'SUCCESS' && DUPLICATED_TAG == 'false'
@@ -194,11 +220,14 @@ pipeline {
             steps {
                 script {
                     sshagent(['jenkins_github_np']) {
-                        cleanGit()
                         sh "git config --global user.email 'adam.stegienko1@gmail.com'"
                         sh "git config --global user.name 'Adam Stegienko'"
+                        
+                        // Create and push tag only - no POM modifications
                         sh "git tag ${env.APP_VERSION}"
                         sh "git push origin tag ${env.APP_VERSION}"
+                        
+                        sh "echo 'Tagged release ${env.APP_VERSION} successfully'"
                     }
                 }
             }
