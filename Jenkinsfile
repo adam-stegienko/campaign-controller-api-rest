@@ -40,7 +40,7 @@ def DUPLICATED_TAG = 'false'
 pipeline {
     agent any
     environment {
-        APP_NAME = 'campaign_controller_api'
+        APP_NAME = 'campaign-controller-api-rest'
         SONAR_SERVER = 'LabSonarQube'
         SONAR_PROJECT_NAME = 'campaign_controller_api'
         SONAR_PROJECT_KEY = 'campaign_controller_api'
@@ -87,7 +87,7 @@ pipeline {
                     submoduleCfg: [],
                     userRemoteConfigs: [[
                         credentialsId: 'jenkins_github_np',
-                        url: 'git@github.com:adam-stegienko/campaign_controller_api.git'
+                        url: 'git@github.com:adam-stegienko/campaign-controller-api-rest.git'
                     ]]
                 ])
             }
