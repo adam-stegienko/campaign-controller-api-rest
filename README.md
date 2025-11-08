@@ -17,3 +17,4 @@ The project uses Maven for dependency management. The dependencies are defined i
 ## Overview
 
 The application is built using Spring Boot framework, which simplifies the development of Java applications by providing a set of conventions and pre-configured components. The project structure follows the standard Maven directory layout, with source code located in the `src/main/java` directory and resources in the `src/main/resources` directory.
+
