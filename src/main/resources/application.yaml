@@ -5,7 +5,7 @@ spring:
     hibernate:
       ddl-auto: update
   liquibase:
-    change-log: classpath:db/changelog/
+    change-log: classpath:db/changelog/changelog.sql
 
 server:
   port: 8000
