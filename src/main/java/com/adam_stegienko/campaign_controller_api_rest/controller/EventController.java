@@ -1,4 +1,4 @@
-package com.adam_stegienko.campaign_controller_api.controller;
+package com.adam_stegienko.campaign_controller_api_rest.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.adam_stegienko.campaign_controller_api.model.PlannerBook;
-import com.adam_stegienko.campaign_controller_api.repositories.PlannerBookRepository;
+import com.adam_stegienko.campaign_controller_api_rest.model.PlannerBook;
+import com.adam_stegienko.campaign_controller_api_rest.repositories.PlannerBookRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 

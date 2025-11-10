@@ -199,16 +199,16 @@ pipeline {
             }
         }
 
-        stage('Archive') {
-            when {
-                expression {
-                    return currentBuild.currentResult == 'SUCCESS' && DUPLICATED_TAG == 'false'
-                }
-            }
-            steps {
-                archiveArtifacts artifacts: "**/target/${env.APP_NAME}*.jar", fingerprint: true
-            }
-        }
+        // stage('Archive') {
+        //     when {
+        //         expression {
+        //             return currentBuild.currentResult == 'SUCCESS' && DUPLICATED_TAG == 'false'
+        //         }
+        //     }
+        //     steps {
+        //         archiveArtifacts artifacts: "**/target/${env.APP_NAME}*.jar", fingerprint: true
+        //     }
+        // }
 
         stage('Maven Deploy') {
             when {

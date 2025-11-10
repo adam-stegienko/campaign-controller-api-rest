@@ -1,6 +1,6 @@
 spring:
   application:
-    name: campaign_controller_api
+    name: campaign_controller_api_rest
   jpa:
     hibernate:
       ddl-auto: update

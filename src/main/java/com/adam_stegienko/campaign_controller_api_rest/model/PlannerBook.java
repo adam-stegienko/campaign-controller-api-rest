@@ -1,4 +1,4 @@
-package com.adam_stegienko.campaign_controller_api.model;
+package com.adam_stegienko.campaign_controller_api_rest.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

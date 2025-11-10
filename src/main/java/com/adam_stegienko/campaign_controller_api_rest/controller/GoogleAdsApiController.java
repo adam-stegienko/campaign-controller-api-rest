@@ -1,4 +1,4 @@
-package com.adam_stegienko.campaign_controller_api.controller;
+package com.adam_stegienko.campaign_controller_api_rest.controller;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adam_stegienko.campaign_controller_api.services.GoogleAdsApiService;
+import com.adam_stegienko.campaign_controller_api_rest.services.GoogleAdsApiService;
 
 @RestController
 @RequestMapping("/v1/api/google-ads")

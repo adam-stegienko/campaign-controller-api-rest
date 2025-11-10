@@ -1,18 +1,18 @@
-package com.adam_stegienko.campaign_controller_api.services;
+package com.adam_stegienko.campaign_controller_api_rest.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.adam_stegienko.campaign_controller_api.dto.CampaignInfo;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Arrays;
 
+import com.adam_stegienko.campaign_controller_api_rest.dto.CampaignInfo;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.ads.googleads.lib.utils.FieldMasks;
 import com.google.ads.googleads.v21.enums.CampaignStatusEnum.CampaignStatus;
 import com.google.ads.googleads.v21.resources.Campaign;

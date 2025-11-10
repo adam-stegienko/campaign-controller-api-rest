@@ -1,4 +1,4 @@
-package com.adam_stegienko.campaign_controller_api;
+package com.adam_stegienko.campaign_controller_api_rest;
 
 import java.util.UUID;
 
@@ -17,18 +17,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.adam_stegienko.campaign_controller_api.controller.PlannerBookController;
-import com.adam_stegienko.campaign_controller_api.repositories.PlannerBookRepository;
-import com.adam_stegienko.campaign_controller_api.services.GoogleAdsApiService;
+import com.adam_stegienko.campaign_controller_api_rest.repositories.PlannerBookRepository;
+import com.adam_stegienko.campaign_controller_api_rest.services.GoogleAdsApiService;
 import com.google.ads.googleads.lib.GoogleAdsClient;
 import com.google.ads.googleads.v21.services.CampaignServiceClient;
 import com.google.ads.googleads.v21.services.GoogleAdsServiceClient;
 
-@SpringBootTest(classes = {
-    CampaignControllerApi.class, 
-    PlannerBookRepository.class, 
-    PlannerBookController.class
-})
+@SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.yaml")

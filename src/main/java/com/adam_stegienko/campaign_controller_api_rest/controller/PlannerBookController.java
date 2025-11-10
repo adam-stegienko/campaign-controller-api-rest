@@ -1,4 +1,4 @@
-package com.adam_stegienko.campaign_controller_api.controller;
+package com.adam_stegienko.campaign_controller_api_rest.controller;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adam_stegienko.campaign_controller_api.model.PlannerBook;
-import com.adam_stegienko.campaign_controller_api.repositories.PlannerBookRepository;
+import com.adam_stegienko.campaign_controller_api_rest.model.PlannerBook;
+import com.adam_stegienko.campaign_controller_api_rest.repositories.PlannerBookRepository;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;

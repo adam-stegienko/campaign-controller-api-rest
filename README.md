@@ -1,4 +1,4 @@
-# campaign_controller_api
+# campaign-controller-api-rest
 
 ## Reference Documentation
 

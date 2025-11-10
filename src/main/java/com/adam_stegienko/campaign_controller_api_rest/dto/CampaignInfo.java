@@ -1,4 +1,4 @@
-package com.adam_stegienko.campaign_controller_api.dto;
+package com.adam_stegienko.campaign_controller_api_rest.dto;
 
 public class CampaignInfo {
     private long id;

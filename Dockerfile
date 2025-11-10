@@ -64,7 +64,7 @@ ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:+UseG1GC -
 
 # Copy the jar file from builder stage
 ARG APP_VERSION
-COPY --from=builder /app/target/campaign_controller_api-*.jar campaign_controller_api.jar
+COPY --from=builder /app/target/campaign_controller_api_rest-*.jar campaign_controller_api_rest.jar
 
 # Change ownership to non-root user
 RUN chown -R appuser:appgroup /app
@@ -77,4 +77,4 @@ USER appuser
 #     CMD wget --no-verbose --tries=1 --spider http://localhost:8000/ || exit 1
 
 # Run the jar file with configurable JVM settings
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar campaign_controller_api.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar campaign_controller_api_rest.jar"]
