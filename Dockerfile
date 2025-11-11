@@ -51,9 +51,9 @@ RUN groupadd -r appgroup && \
 # Set working directory
 WORKDIR /app
 
-# Create writable temp directory for Tomcat
-RUN mkdir -p /app/temp && \
-    chown -R appuser:appgroup /app/temp
+# Create writable temp directory for Tomcat in /tmp (which is writable)
+RUN mkdir -p /tmp/tomcat && \
+    chown -R appuser:appgroup /tmp/tomcat
 
 # Expose port
 EXPOSE 8000
@@ -67,5 +67,5 @@ RUN chown -R appuser:appgroup /app
 # Switch to app user
 USER appuser
 
-# Run the application with explicit Java system properties
-CMD ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-Djava.io.tmpdir=/app/temp", "-jar", "app.jar"]
+# Run the application with explicit Java system properties using /tmp for temp files
+CMD ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-Djava.io.tmpdir=/tmp/tomcat", "-jar", "app.jar"]
