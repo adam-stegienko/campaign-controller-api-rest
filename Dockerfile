@@ -27,10 +27,10 @@ COPY src ./src
 ARG APP_VERSION
 ARG BUILD_PHASE=package
 ARG SKIP_TESTS=true
-RUN if [ -n "$APP_VERSION" ]; then \
-        mvn versions:set -DnewVersion=${APP_VERSION} -DgenerateBackupPoms=false; \
-    fi && \
-    if [ "$SKIP_TESTS" = "true" ]; then \
+
+# Build the application (version should be set in POM before Docker build)
+# APP_VERSION is passed for reference but not used for version manipulation
+RUN if [ "$SKIP_TESTS" = "true" ]; then \
         mvn clean ${BUILD_PHASE} -DskipTests; \
     else \
         mvn clean test ${BUILD_PHASE}; \

@@ -158,8 +158,18 @@ pipeline {
             }
             steps {
                 withMaven() {
-                    sh "mvn versions:set -DnewVersion=${env.APP_VERSION} -DgenerateBackupPoms=false"
-                    sh "echo 'Set version to ${env.APP_VERSION} for build (not committed)'"
+                    script {
+                        try {
+                            sh "mvn versions:set -DnewVersion=${env.APP_VERSION} -DgenerateBackupPoms=false"
+                            sh "echo 'Set version to ${env.APP_VERSION} for build (not committed)'"
+                        } catch (Exception e) {
+                            // If versions plugin fails, manually update the POM
+                            sh """
+                                sed -i 's|<version>.*-SNAPSHOT</version>|<version>${env.APP_VERSION}</version>|' pom.xml
+                                echo 'Updated version to ${env.APP_VERSION} using sed (fallback method)'
+                            """
+                        }
+                    }
                 }
             }
         }
