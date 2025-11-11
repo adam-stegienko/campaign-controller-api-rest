@@ -6,7 +6,7 @@
 
   <groupId>com.adam_stegienko.campaign_controller_api_rest</groupId>
   <artifactId>campaign_controller_api_rest</artifactId>
-  <version>0.7.0-SNAPSHOT</version>
+  <version>0.8.0-SNAPSHOT</version>
   <name>campaign_controller_api_rest</name>
   <description>Google Campaign Controller API</description>
   <packaging>jar</packaging>
