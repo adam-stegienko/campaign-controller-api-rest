@@ -190,10 +190,24 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry("https://${env.DOCKER_REGISTRY}", "docker_registry_credentials") {
-                        def appImage = docker.image("${env.DOCKER_REGISTRY}/${env.APP_NAME}:${env.APP_VERSION}")
-                        appImage.push()
-                        appImage.push('latest')
+                    try {
+                        // Try with explicit docker login using credentials
+                        withCredentials([usernamePassword(credentialsId: 'docker_registry_credentials', 
+                                                       usernameVariable: 'DOCKER_USERNAME', 
+                                                       passwordVariable: 'DOCKER_PASSWORD')]) {
+                            sh "echo 'Attempting Docker login to ${env.DOCKER_REGISTRY}'"
+                            sh "echo \$DOCKER_PASSWORD | docker login ${env.DOCKER_REGISTRY} --username \$DOCKER_USERNAME --password-stdin"
+                            sh "docker push ${env.DOCKER_REGISTRY}/${env.APP_NAME}:${env.APP_VERSION}"
+                            sh "docker push ${env.DOCKER_REGISTRY}/${env.APP_NAME}:latest"
+                        }
+                    } catch (Exception e) {
+                        echo "Credentials-based authentication failed: ${e.getMessage()}"
+                        echo "Trying fallback with docker.withRegistry..."
+                        docker.withRegistry("https://${env.DOCKER_REGISTRY}", "docker_registry_credentials") {
+                            def appImage = docker.image("${env.DOCKER_REGISTRY}/${env.APP_NAME}:${env.APP_VERSION}")
+                            appImage.push()
+                            appImage.push('latest')
+                        }
                     }
                 }
             }
