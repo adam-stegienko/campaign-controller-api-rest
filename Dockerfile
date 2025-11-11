@@ -58,9 +58,6 @@ RUN mkdir -p /app/temp && \
 # Expose port
 EXPOSE 8000
 
-# Set Java options with custom temp directory
-ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -Djava.io.tmpdir=/app/temp"
-
 # Copy jar from build stage
 COPY --from=builder /app/target/campaign_controller_api_rest-*.jar app.jar
 
@@ -70,5 +67,5 @@ RUN chown -R appuser:appgroup /app
 # Switch to app user
 USER appuser
 
-# Run the application
-CMD ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+# Run the application with explicit Java system properties
+CMD ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-Djava.io.tmpdir=/app/temp", "-jar", "app.jar"]

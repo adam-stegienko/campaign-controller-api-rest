@@ -47,6 +47,10 @@ public class GoogleAdsApiService {
     }
 
     public String getCampaignStatusByName(String customerId, String campaignName) {
+        if (googleAdsServiceClient == null) {
+            return "Google Ads API not configured - please provide valid credentials";
+        }
+        
         String query = String.format("SELECT campaign.id, campaign.name, campaign.status FROM campaign WHERE campaign.name = '%s'", campaignName);
         SearchGoogleAdsRequest request = SearchGoogleAdsRequest.newBuilder()
                 .setCustomerId(customerId)

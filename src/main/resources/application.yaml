@@ -10,10 +10,13 @@ spring:
 server:
   port: 8000
 
-# Google Ads API configuration
+# Google Ads API configuration (provide real values via environment variables in production)
 api:
   googleads:
-    enabled: false  # Set to true and provide credentials to enable Google Ads API
+    enabled: ${API_GOOGLEADS_ENABLED:false}
+    developerToken: ${API_GOOGLEADS_DEVELOPERTOKEN:dummy-token}
+    serviceAccountSecretsPath: ${API_GOOGLEADS_SERVICEACCOUNTSECRETSPATH:/dev/null}
+    loginCustomerId: ${API_GOOGLEADS_LOGINCUSTOMERID:0000000000}
 
 # OpenAPI properties
 springdoc:
