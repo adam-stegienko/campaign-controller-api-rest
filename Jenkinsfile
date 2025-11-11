@@ -196,7 +196,9 @@ pipeline {
                                                        usernameVariable: 'DOCKER_USERNAME', 
                                                        passwordVariable: 'DOCKER_PASSWORD')]) {
                             sh "echo 'Attempting Docker login to ${env.DOCKER_REGISTRY}'"
-                            sh "echo \$DOCKER_PASSWORD | docker login ${env.DOCKER_REGISTRY} --username \$DOCKER_USERNAME --password-stdin"
+                            sh '''
+                                echo "$DOCKER_PASSWORD" | docker login ''' + env.DOCKER_REGISTRY + ''' --username "$DOCKER_USERNAME" --password-stdin
+                            '''
                             sh "docker push ${env.DOCKER_REGISTRY}/${env.APP_NAME}:${env.APP_VERSION}"
                             sh "docker push ${env.DOCKER_REGISTRY}/${env.APP_NAME}:latest"
                         }
