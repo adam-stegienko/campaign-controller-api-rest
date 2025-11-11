@@ -18,45 +18,20 @@ RUN mkdir -p /root/.m2 && \
         cp /tmp/maven-settings.xml /root/.m2/settings.xml; \
         echo "Using provided Maven settings"; \
     else \
-        echo "No Maven settings provided, creating fallback settings with multiple mirrors"; \
-        cat > /root/.m2/settings.xml << 'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 
-          http://maven.apache.org/xsd/settings-1.0.0.xsd">
-  <mirrors>
-    <mirror>
-      <id>central-fallback</id>
-      <mirrorOf>central</mirrorOf>
-      <name>Maven Central Fallback</name>
-      <url>https://repo1.maven.org/maven2</url>
-    </mirror>
-  </mirrors>
-  <profiles>
-    <profile>
-      <id>fallback-repos</id>
-      <repositories>
-        <repository>
-          <id>central</id>
-          <url>https://repo1.maven.org/maven2</url>
-          <releases><enabled>true</enabled></releases>
-          <snapshots><enabled>false</enabled></snapshots>
-        </repository>
-        <repository>
-          <id>spring-releases</id>
-          <url>https://repo.spring.io/release</url>
-          <releases><enabled>true</enabled></releases>
-          <snapshots><enabled>false</enabled></snapshots>
-        </repository>
-      </repositories>
-    </profile>
-  </profiles>
-  <activeProfiles>
-    <activeProfile>fallback-repos</activeProfile>
-  </activeProfiles>
-</settings>
-EOF
+        echo "Creating fallback Maven settings with public repositories"; \
+        printf '%s\n' \
+            '<?xml version="1.0" encoding="UTF-8"?>' \
+            '<settings>' \
+            '  <mirrors>' \
+            '    <mirror>' \
+            '      <id>central-mirror</id>' \
+            '      <mirrorOf>central</mirrorOf>' \
+            '      <url>https://repo1.maven.org/maven2</url>' \
+            '    </mirror>' \
+            '  </mirrors>' \
+            '</settings>' \
+            > /root/.m2/settings.xml; \
+        echo "Created fallback Maven settings"; \
     fi
 
 # Copy Maven repository cache if provided (for offline builds)
