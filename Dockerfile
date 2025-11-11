@@ -52,13 +52,14 @@ RUN groupadd -r appgroup && \
 WORKDIR /app
 
 # Create writable temp directory for Tomcat
-RUN chown -R appuser:appgroup /app
+RUN mkdir -p /app/temp && \
+    chown -R appuser:appgroup /app/temp
 
 # Expose port
 EXPOSE 8000
 
 # Set Java options with custom temp directory
-ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -Djava.io.tmpdir=/app/temp"
 
 # Copy jar from build stage
 COPY --from=builder /app/target/campaign_controller_api_rest-*.jar app.jar

@@ -10,6 +10,11 @@ spring:
 server:
   port: 8000
 
+# Google Ads API configuration
+api:
+  googleads:
+    enabled: false  # Set to true and provide credentials to enable Google Ads API
+
 # OpenAPI properties
 springdoc:
   swagger-ui:

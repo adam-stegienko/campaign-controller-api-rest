@@ -3,6 +3,7 @@ package com.adam_stegienko.campaign_controller_api_rest.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +15,7 @@ import com.adam_stegienko.campaign_controller_api_rest.services.GoogleAdsApiServ
 
 @RestController
 @RequestMapping("/v1/api/google-ads")
+@ConditionalOnProperty(name = "api.googleads.enabled", havingValue = "true", matchIfMissing = false)
 public class GoogleAdsApiController {
 
     private final GoogleAdsApiService googleAdsService;

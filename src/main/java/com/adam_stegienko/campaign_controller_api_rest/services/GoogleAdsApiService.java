@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import com.adam_stegienko.campaign_controller_api_rest.dto.CampaignInfo;
@@ -27,6 +28,7 @@ import com.google.ads.googleads.v21.services.SearchGoogleAdsRequest;
 import com.google.ads.googleads.v21.utils.ResourceNames;
 
 @Service
+@ConditionalOnProperty(name = "api.googleads.enabled", havingValue = "true", matchIfMissing = false)
 public class GoogleAdsApiService {
 
     private static final Logger logger = LoggerFactory.getLogger(GoogleAdsApiService.class);
