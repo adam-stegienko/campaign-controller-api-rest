@@ -51,10 +51,13 @@ RUN groupadd -r appgroup && \
 # Set working directory
 WORKDIR /app
 
+# Create writable temp directory for Tomcat
+RUN chown -R appuser:appgroup /app
+
 # Expose port
 EXPOSE 8000
 
-# Set Java options
+# Set Java options with custom temp directory
 ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
 
 # Copy jar from build stage
