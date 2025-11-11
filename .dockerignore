@@ -3,11 +3,15 @@ config/
 application*.properties
 application-local.yaml
 
-# Build artifacts
+# Build artifacts (except what we specifically copy)
 target/
 *.jar
 *.war
 *.class
+
+# Include Maven repository cache when copied by Jenkins
+!.m2-repository/
+!maven-settings.xml
 
 # IDE files
 .idea/

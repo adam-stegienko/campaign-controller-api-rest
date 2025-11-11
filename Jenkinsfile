@@ -192,19 +192,35 @@ pipeline {
             }
             steps {
                 script {
-                    // Copy Maven settings for Docker build (Jenkins has this file)
+                    // Copy Maven settings for Docker build
                     sh 'cp ~/.m2/settings.xml maven-settings.xml'
                     
-                    // Build Docker image (tests already passed in SonarQube stage)
+                    // Copy Maven repository cache for offline builds (resilient to network issues)
+                    sh '''
+                        echo "Copying Maven repository cache for offline Docker builds..."
+                        if [ -d ~/.m2/repository ]; then
+                            cp -r ~/.m2/repository .m2-repository
+                            echo "Maven repository cache copied successfully"
+                        else
+                            echo "No Maven repository cache found, will download during Docker build"
+                        fi
+                    '''
+                    
+                    // Build Docker image with resilient dependency handling
                     sh """
+                        echo "Building Docker image with offline dependency support..."
                         docker build \
                         --build-arg APP_VERSION=${env.APP_VERSION} \
                         --build-arg SKIP_TESTS=true \
                         -t ${env.DOCKER_REGISTRY}/${env.APP_NAME}:${env.APP_VERSION} .
                     """
                     
-                    // Clean up settings file
-                    sh 'rm -f maven-settings.xml'
+                    // Clean up copied files
+                    sh '''
+                        rm -f maven-settings.xml
+                        rm -rf .m2-repository
+                        echo "Cleaned up temporary Maven files"
+                    '''
                 }
             }
         }
