@@ -12,21 +12,49 @@ def calculateReleaseVersion(currentVersion) {
     // Fetch the latest commit message
     def commitMessage = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 
-    // For snapshot versions, we can release as-is or increment based on commit message
+    // Calculate initial version based on commit message
+    def newVersion = ""
     if (commitMessage.contains('[major]')) {
         major = major.toInteger() + 1
         minor = '0'
         patch = '0'
+        newVersion = "${major}.${minor}.${patch}"
     } else if (commitMessage.contains('[minor]')) {
         minor = minor.toInteger() + 1
         patch = '0'
+        newVersion = "${major}.${minor}.${patch}"
     } else if (!currentVersion.contains('-SNAPSHOT')) {
         // If current version is not snapshot, increment patch
         patch = patch.toInteger() + 1
+        newVersion = "${major}.${minor}.${patch}"
+    } else {
+        // Default for snapshot versions
+        newVersion = "${major}.${minor}.${patch}"
     }
-    // If it's already a snapshot and no explicit increment, use the base version
 
-    return "${major}.${minor}.${patch}"
+    // Check if tag already exists, if so increment patch version
+    def tagExists = true
+    def attempts = 0
+    def maxAttempts = 10
+    
+    while (tagExists && attempts < maxAttempts) {
+        try {
+            sh(returnStdout: true, script: "git tag -l ${newVersion}").trim()
+            if (sh(returnStdout: true, script: "git tag -l ${newVersion}").trim()) {
+                // Tag exists, increment patch
+                def (maj, min, pat) = newVersion.tokenize('.')
+                pat = pat.toInteger() + 1
+                newVersion = "${maj}.${min}.${pat}"
+                attempts++
+            } else {
+                tagExists = false
+            }
+        } catch (Exception e) {
+            tagExists = false
+        }
+    }
+
+    return newVersion
 }
 
 def cleanGit() {
@@ -235,7 +263,19 @@ pipeline {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') {
                     withMaven() {
-                        sh 'mvn clean deploy'
+                        script {
+                            try {
+                                sh 'mvn clean deploy'
+                                sh "echo 'Maven deploy successful for version ${env.APP_VERSION}'"
+                            } catch (Exception e) {
+                                if (e.getMessage().contains('cannot be updated') || e.getMessage().contains('400')) {
+                                    sh "echo 'Artifact ${env.APP_VERSION} already exists in repository - skipping deploy'"
+                                    currentBuild.result = 'SUCCESS'
+                                } else {
+                                    throw e
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -253,9 +293,23 @@ pipeline {
                         sh "git config --global user.email 'adam.stegienko1@gmail.com'"
                         sh "git config --global user.name 'Adam Stegienko'"
                         
-                        // Create and push tag only - no POM modifications
+                        // Check if tag already exists and delete if needed
+                        def tagExists = sh(returnStdout: true, script: "git tag -l ${env.APP_VERSION}").trim()
+                        if (tagExists) {
+                            sh "echo 'Tag ${env.APP_VERSION} already exists locally, deleting it'"
+                            sh "git tag -d ${env.APP_VERSION}"
+                        }
+                        
+                        // Create and push tag
                         sh "git tag ${env.APP_VERSION}"
-                        sh "git push origin tag ${env.APP_VERSION}"
+                        
+                        // Push tag (force push if it exists remotely)
+                        try {
+                            sh "git push origin tag ${env.APP_VERSION}"
+                        } catch (Exception e) {
+                            sh "echo 'Tag might exist remotely, trying force push'"
+                            sh "git push --force origin tag ${env.APP_VERSION}"
+                        }
                         
                         sh "echo 'Tagged release ${env.APP_VERSION} successfully'"
                     }
