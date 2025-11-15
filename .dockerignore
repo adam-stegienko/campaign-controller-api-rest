@@ -1,5 +1,5 @@
 # Configuration files (use environment-specific configs)
-config/
+google_ads_config.json
 application*.properties
 application-local.yaml
 

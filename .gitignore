@@ -1,4 +1,4 @@
-config/
+google_ads_config.json
 application*.properties
 application-local.yaml
 maven-settings.xml
