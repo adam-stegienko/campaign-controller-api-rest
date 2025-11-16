@@ -24,8 +24,13 @@ RUN mkdir -p /root/.m2 && \
     echo '  </mirrors>' >> /root/.m2/settings.xml && \
     echo '</settings>' >> /root/.m2/settings.xml
 
-# Copy application files
+# Copy pom.xml first to leverage Docker layer caching
 COPY pom.xml .
+
+# Download dependencies (this layer will be cached if pom.xml doesn't change)
+RUN mvn dependency:go-offline -B
+
+# Copy source code
 COPY src ./src
 
 # Build the application
@@ -39,9 +44,9 @@ RUN if [ "$SKIP_TESTS" = "true" ]; then \
 # Stage 2: Runtime stage
 FROM oraclelinux:10 AS runtime
 
-# Install Java runtime
+# Install Java runtime and curl for health checks
 RUN dnf update -y && \
-    dnf install -y java-21-openjdk-headless && \
+    dnf install -y java-21-openjdk-headless curl && \
     dnf clean all
 
 # Create app user
@@ -65,6 +70,10 @@ RUN chown -R appuser:appgroup /app
 
 # Switch to app user
 USER appuser
+
+# Add health check using the Spring Boot Actuator health endpoint
+HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
 
 # Run the application with explicit Java system properties
 # Use default /tmp which will be mounted as a volume and thus writable

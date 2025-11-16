@@ -26,3 +26,20 @@ springdoc:
     path: /swagger-ui
   api-docs:
     path: /api-docs
+
+# Actuator configuration for health checks
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+      base-path: /
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: always
+  health:
+    defaults:
+      enabled: true
+    db:
+      enabled: true
