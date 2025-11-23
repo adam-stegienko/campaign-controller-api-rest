@@ -278,7 +278,8 @@ EOF
                     withMaven() {
                         script {
                             try {
-                                sh 'mvn version:set -DnewVersion=${APP_VERSION}'
+                                // Correct plugin prefix is "versions", not "version".
+                                sh 'mvn -B versions:set -DnewVersion=${APP_VERSION} -DgenerateBackupPoms=false'
                                 sh 'mvn -B deploy -DskipTests'
                                 sh "echo 'Maven deploy successful for version ${env.APP_VERSION}'"
                             } catch (Exception e) {
