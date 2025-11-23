@@ -270,7 +270,7 @@ EOF
         stage('Maven Deploy') {
             when {
                 expression {
-                    return currentBuild.currentResult == 'SUCCESS'
+                    return currentBuild.currentResult == 'SUCCESS' && env.BRANCH_NAME?.startsWith('release/')
                 }
             }
             steps {
