@@ -115,15 +115,6 @@ pipeline {
     }
     stages {
 
-        stage('Start') {
-            steps {
-                script {
-                    step([$class: "GitHubPRStatusBuilder", statusMessage: [content: "Pipeline started"]])
-                    step([$class: "GitHubCommitStatusSetter", statusResultSource: [$class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: "Build started", state: "PENDING"]]]])
-                }
-            }
-        }
-
         stage('Clean Workspace') {
             steps {
                 sshagent(['jenkins_github_np']) {
@@ -136,6 +127,15 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Start') {
+            steps {
+                script {
+                    step([$class: "GitHubPRStatusBuilder", statusMessage: [content: "Pipeline started"]])
+                    step([$class: "GitHubCommitStatusSetter", statusResultSource: [$class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: "Build started", state: "PENDING"]]]])
+                }
             }
         }
 
