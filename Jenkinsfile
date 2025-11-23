@@ -278,6 +278,7 @@ EOF
                     withMaven() {
                         script {
                             try {
+                                sh 'mvn version:set -DnewVersion=${APP_VERSION}'
                                 sh 'mvn -B deploy -DskipTests'
                                 sh "echo 'Maven deploy successful for version ${env.APP_VERSION}'"
                             } catch (Exception e) {
