@@ -130,14 +130,14 @@ pipeline {
             }
         }
 
-        stage('Start') {
-            steps {
-                script {
-                    step([$class: "GitHubPRStatusBuilder", statusMessage: [content: "Pipeline started"]])
-                    step([$class: "GitHubCommitStatusSetter", statusResultSource: [$class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: "Build started", state: "PENDING"]]]])
-                }
-            }
-        }
+        // stage('Start') {
+        //     steps {
+        //         script {
+        //             step([$class: "GitHubPRStatusBuilder", statusMessage: [content: "Pipeline started"]])
+        //             step([$class: "GitHubCommitStatusSetter", statusResultSource: [$class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: "Build started", state: "PENDING"]]]])
+        //         }
+        //     }
+        // }
 
         stage('Calculate Version') {
             steps {
