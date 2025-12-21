@@ -36,7 +36,7 @@ public class WebConfiguration {
                             .allowCredentials(true);
                 } else if (Arrays.asList(env.getActiveProfiles()).contains("stage")) {
                     registry.addMapping("/v1/api/**")
-                            .allowedOrigins("https://campaign-controller-stage.apps.stegienko.com")
+                            .allowedOrigins("https://campaign-controller-stage.apps.stegienko.local")
                             .allowedMethods("*")
                             .allowedHeaders("*")
                             .allowCredentials(true);
