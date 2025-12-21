@@ -28,9 +28,15 @@ public class WebConfiguration {
                             .allowedMethods("*")
                             .allowedHeaders("*")
                             .allowCredentials(true);
-                } else {
+                } else if (Arrays.asList(env.getActiveProfiles()).contains("dev")) {
                     registry.addMapping("/v1/api/**")
-                            .allowedOrigins("https://campaign-controller.apps.stegienko.local")
+                            .allowedOrigins("https://campaign-controller-dev.apps.stegienko.local")
+                            .allowedMethods("*")
+                            .allowedHeaders("*")
+                            .allowCredentials(true);
+                } else if (Arrays.asList(env.getActiveProfiles()).contains("stage")) {
+                    registry.addMapping("/v1/api/**")
+                            .allowedOrigins("https://campaign-controller-stage.apps.stegienko.com")
                             .allowedMethods("*")
                             .allowedHeaders("*")
                             .allowCredentials(true);
