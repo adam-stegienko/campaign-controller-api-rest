@@ -43,3 +43,21 @@ management:
       enabled: true
     db:
       enabled: true
+  tracing:
+    enabled: false
+    sampling:
+      probability: 1.0
+    exporter:
+      otlp:
+        enabled: false
+        endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4317}
+  metrics:
+    export:
+      otlp:
+        enabled: false
+        url: ${OTEL_METRICS_OTLP_URL:http://localhost:4318/v1/metrics}
+
+logging:
+  level:
+    io.micrometer.tracing: INFO
+    org.springframework.web: INFO

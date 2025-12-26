@@ -20,17 +20,17 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
-      <version>3.3.11</version>
+      <version>3.4.4</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-      <version>3.3.11</version>
+      <version>3.4.4</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
-      <version>3.3.11</version>
+      <version>3.4.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -42,17 +42,17 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-jdbc</artifactId>
-      <version>3.3.11</version>
+      <version>3.4.4</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
-      <version>3.3.11</version>
+      <version>3.4.4</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
-      <version>3.3.11</version>
+      <version>3.4.4</version>
     </dependency>
     <dependency>
       <groupId>jakarta.annotation</groupId>
@@ -161,6 +161,34 @@
       <version>2.18.2</version>
     </dependency>
     <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-tracing</artifactId>
+        <version>1.4.4</version>
+    </dependency>
+    <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-tracing-bridge-otel</artifactId>
+        <version>1.4.4</version>
+        <exclusions>
+          <!-- Avoid SLF4J 1.7 on classpath; use Spring Boot's SLF4J 2.x -->
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+          </exclusion>
+        </exclusions>
+    </dependency>
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-exporter-otlp</artifactId>
+        <version>1.39.0</version>
+    </dependency>
+    <!-- Micrometer OTLP metrics registry -->
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-otlp</artifactId>
+      <version>1.14.5</version>
+    </dependency>
+    <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>2.4.240</version>
@@ -230,7 +258,7 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>3.3.11</version>
+        <version>3.4.4</version>
         <configuration>
             <mainClass>com.adam_stegienko.campaign_controller_api_rest.CampaignControllerApi</mainClass>
         </configuration>
