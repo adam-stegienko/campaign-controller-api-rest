@@ -18,15 +18,6 @@ api:
     serviceAccountSecretsPath: ${API_GOOGLEADS_SERVICEACCOUNTSECRETSPATH:/dev/null}
     loginCustomerId: ${API_GOOGLEADS_LOGINCUSTOMERID:0000000000}
 
-# OpenAPI properties
-springdoc:
-  swagger-ui:
-    enabled: true
-    operations-sorter: method
-    path: /swagger-ui
-  api-docs:
-    path: /api-docs
-
 # Actuator configuration for health checks
 management:
   endpoints:
@@ -43,3 +34,16 @@ management:
       enabled: true
     db:
       enabled: true
+  tracing:
+    enabled: false
+    sampling:
+      probability: 1.0
+    exporter:
+      otlp:
+        enabled: false
+        endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4317}
+  metrics:
+    export:
+      otlp:
+        enabled: false
+        url: ${OTEL_METRICS_OTLP_URL:http://localhost:4318/v1/metrics}
