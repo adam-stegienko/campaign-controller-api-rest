@@ -1,0 +1,9 @@
+# OpenAPI properties
+springdoc:
+  swagger-ui:
+    enabled: false
+
+logging:
+  level:
+    io.micrometer.tracing: WARN
+    org.springframework.web: WARN

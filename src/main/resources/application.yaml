@@ -18,15 +18,6 @@ api:
     serviceAccountSecretsPath: ${API_GOOGLEADS_SERVICEACCOUNTSECRETSPATH:/dev/null}
     loginCustomerId: ${API_GOOGLEADS_LOGINCUSTOMERID:0000000000}
 
-# OpenAPI properties
-springdoc:
-  swagger-ui:
-    enabled: true
-    operations-sorter: method
-    path: /swagger-ui
-  api-docs:
-    path: /api-docs
-
 # Actuator configuration for health checks
 management:
   endpoints:
@@ -56,8 +47,3 @@ management:
       otlp:
         enabled: false
         url: ${OTEL_METRICS_OTLP_URL:http://localhost:4318/v1/metrics}
-
-logging:
-  level:
-    io.micrometer.tracing: INFO
-    org.springframework.web: INFO
