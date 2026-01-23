@@ -224,7 +224,7 @@ EOF
         stage('Docker Image Security Scan') {
             when {
                 expression {
-                   return currentBuild.currentResult == 'SUCCESS' && env.BRANCH_NAME?.startsWith('release/')
+                   return currentBuild.currentResult == 'SUCCESS' && env.BRANCH_NAME?.startsWith('release/1')
                 }
             }
             steps {
