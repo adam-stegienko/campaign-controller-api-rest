@@ -35,15 +35,16 @@ management:
     db:
       enabled: true
   tracing:
-    enabled: ${OTEL_TRACING_OTLP_ENABLED:false}
+    enabled: ${MANAGEMENT_TRACING_EXPORTER_OTLP_ENABLED:false}
     sampling:
       probability: 1.0
     exporter:
       otlp:
-        enabled: ${OTEL_TRACING_OTLP_ENABLED:false}
-        endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4317}
-  metrics:
-    export:
-      otlp:
-        enabled: ${OTEL_METRICS_OTLP_ENABLED:false}
-        url: ${OTEL_METRICS_OTLP_ENDPOINT:http://localhost:4318/v1/metrics}
+        enabled: ${MANAGEMENT_TRACING_EXPORTER_OTLP_ENABLED:false}
+        endpoint: ${MANAGEMENT_TRACING_EXPORTER_OTLP_ENDPOINT:http://localhost:4317}
+  otlp:
+    enabled: ${MANAGEMENT_OTLP_ENABLED:false}
+    endpoint: ${MANAGEMENT_OTLP_ENDPOINT:http://localhost:4317}
+    metrics:
+      enabled: ${MANAGEMENT_OTLP_METRICS_ENABLED:false}
+      endpoint: ${MANAGEMENT_METRICS_OTLP_ENDPOINT:http://localhost:4318/v1/metrics}
