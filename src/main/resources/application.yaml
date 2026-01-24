@@ -35,15 +35,15 @@ management:
     db:
       enabled: true
   tracing:
-    enabled: false
+    enabled: ${OTEL_TRACING_OTLP_ENABLED:false}
     sampling:
       probability: 1.0
     exporter:
       otlp:
-        enabled: false
+        enabled: ${OTEL_TRACING_OTLP_ENABLED:false}
         endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4317}
   metrics:
     export:
       otlp:
-        enabled: false
-        url: ${OTEL_METRICS_OTLP_URL:http://localhost:4318/v1/metrics}
+        enabled: ${OTEL_METRICS_OTLP_ENABLED:false}
+        url: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4318}/v1/metrics
