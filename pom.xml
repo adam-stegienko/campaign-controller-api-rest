@@ -323,6 +323,10 @@
     </plugins>
   </build>
 
+<!-- "BPE_APPEND_JAVA_TOOL_OPTIONS":
+        "-javaagent:BOOT-INF/lib/opentelemetry-javaagent-${catalog.otel.agent.jar.get().version}.jar " +
+        "-Dotel.javaagent.extensions=BOOT-INF/lib/http-healthz-extension-${catalog.otel.agent.extension.healthz.get().version}.jar ", -->
+  
   <repositories>
     <repository>
       <id>central</id>
