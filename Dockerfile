@@ -53,8 +53,19 @@ RUN dnf update -y && \
 RUN groupadd -r appgroup && \
     useradd -r -g appgroup -u 1001 appuser
 
+# OTEL version
+ENV OTEL_VERSION=2.27.0
+
 # Set working directory
 WORKDIR /app
+
+# Downlaod OTEL agent
+RUN set -eux; \
+  URL="https://repo1.maven.org/maven2/io/opentelemetry/javaagent/opentelemetry-javaagent/${OTEL_VERSION}/opentelemetry-javaagent-${OTEL_VERSION}"; \
+  curl -fsSL -o opentelemetry-javaagent.jar "${URL}.jar"; \
+  curl -fsSL -o opentelemetry-javaagent.jar.sha256 "${URL}.sha256"; \
+  echo "$(cat opentelemetry-javaagent.jar.sha256)  opentelemetry-javaagent.jar" | sha256sum -c - || exit 1; \
+  rm -f "${OTEL_JAR}.sha256"
 
 # Create a volume for temporary files - this will be writable even in restricted environments
 VOLUME ["/tmp"]
@@ -77,4 +88,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
 
 # Run the application with explicit Java system properties
 # Use default /tmp which will be mounted as a volume and thus writable
-CMD ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-Dserver.tomcat.basedir=/tmp", "-jar", "app.jar"]
+CMD ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-Dserver.tomcat.basedir=/tmp", "-javaagent:opentelemetry-javaagent.jar", "-jar", "app.jar"]
