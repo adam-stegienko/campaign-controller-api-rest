@@ -240,17 +240,23 @@ EOF
             }
             steps {
                 script {
-                    docker.withRegistry("https://${env.DOCKER_REGISTRY}", "docker_registry_credentials") {
-                        def appImage = docker.image("${env.DOCKER_REGISTRY}/${env.APP_NAME}:${env.APP_VERSION}")
-                        appImage.push()
-                        
-                        // Only push 'latest' tag for master branch
+                    withCredentials([usernamePassword(credentialsId: 'docker_registry_credentials',
+                                                      usernameVariable: 'REGISTRY_USER',
+                                                      passwordVariable: 'REGISTRY_PASS')]) {
+                        sh '''
+                            echo "$REGISTRY_PASS" | docker login --username "$REGISTRY_USER" --password-stdin "https://''' + env.DOCKER_REGISTRY + '''"
+                        '''
+                        sh "docker push ${env.DOCKER_REGISTRY}/${env.APP_NAME}:${env.APP_VERSION}"
+
                         if (env.BRANCH_NAME == 'master') {
-                            appImage.push('latest')
+                            sh "docker tag ${env.DOCKER_REGISTRY}/${env.APP_NAME}:${env.APP_VERSION} ${env.DOCKER_REGISTRY}/${env.APP_NAME}:latest"
+                            sh "docker push ${env.DOCKER_REGISTRY}/${env.APP_NAME}:latest"
                             sh "echo 'Pushed latest tag for master branch'"
                         } else {
                             sh "echo 'Skipping latest tag (only master branch gets latest tag)'"
                         }
+
+                        sh "docker logout ${env.DOCKER_REGISTRY}"
                     }
                 }
             }
