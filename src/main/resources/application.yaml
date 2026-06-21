@@ -9,6 +9,8 @@ spring:
 
 server:
   port: 8000
+  http2:
+    enabled: true
 
 # Google Ads API configuration (provide real values via environment variables in production)
 api:
