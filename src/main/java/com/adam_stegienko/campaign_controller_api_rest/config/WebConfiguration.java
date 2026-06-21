@@ -30,13 +30,13 @@ public class WebConfiguration {
                             .allowCredentials(true);
                 } else if (Arrays.asList(env.getActiveProfiles()).contains("dev")) {
                     registry.addMapping("/v1/api/**")
-                            .allowedOrigins("https://campaign-controller-dev.apps.stegienko.local")
+                            .allowedOrigins("https://campaign-controller-dev.apps.stegienko.local", "https://campaign-controller-api-gateway-dev.apps.stegienko.local/")
                             .allowedMethods("*")
                             .allowedHeaders("*")
                             .allowCredentials(true);
                 } else if (Arrays.asList(env.getActiveProfiles()).contains("stage")) {
                     registry.addMapping("/v1/api/**")
-                            .allowedOrigins("https://campaign-controller-stage.apps.stegienko.local")
+                            .allowedOrigins("https://campaign-controller-stage.apps.stegienko.local", "https://campaign-controller-api-gateway-stage.apps.stegienko.local/")
                             .allowedMethods("*")
                             .allowedHeaders("*")
                             .allowCredentials(true);
