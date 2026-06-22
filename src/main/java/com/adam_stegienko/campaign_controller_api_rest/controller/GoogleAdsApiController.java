@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.adam_stegienko.campaign_controller_api_rest.services.GoogleAdsApiService;
 
 @RestController
-@RequestMapping("/v1/api/google-ads")
+@RequestMapping(value = "/v1/api/google-ads", produces = MediaType.APPLICATION_JSON_VALUE)
 @ConditionalOnProperty(name = "api.googleads.enabled", havingValue = "true", matchIfMissing = false)
 public class GoogleAdsApiController {
 
