@@ -16,12 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.adam_stegienko.campaign_controller_api_rest.repositories.PlannerBookRepository;
-import com.adam_stegienko.campaign_controller_api_rest.services.GoogleAdsApiService;
-import com.google.ads.googleads.lib.GoogleAdsClient;
-import com.google.ads.googleads.v21.services.CampaignServiceClient;
-import com.google.ads.googleads.v21.services.GoogleAdsServiceClient;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -34,18 +29,6 @@ class CampaignControllerApiTests {
 
     @MockBean
     private PlannerBookRepository plannerBookRepository;
-
-    @MockBean
-    private GoogleAdsClient googleAdsClient;
-
-    @MockBean
-    private GoogleAdsServiceClient googleAdsServiceClient;
-
-    @MockBean
-    private CampaignServiceClient campaignServiceClient;
-
-    @MockBean
-    private GoogleAdsApiService googleAdsApiService;
 
     @Test
     void shouldReturnCampaignControllerApp() throws Exception {

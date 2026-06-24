@@ -12,14 +12,6 @@ server:
   http2:
     enabled: true
 
-# Google Ads API configuration (provide real values via environment variables in production)
-api:
-  googleads:
-    enabled: ${API_GOOGLEADS_ENABLED:false}
-    developerToken: ${API_GOOGLEADS_DEVELOPERTOKEN:dummy-token}
-    serviceAccountSecretsPath: ${API_GOOGLEADS_SERVICEACCOUNTSECRETSPATH:/dev/null}
-    loginCustomerId: ${API_GOOGLEADS_LOGINCUSTOMERID:0000000000}
-
 # Actuator configuration for health checks
 management:
   endpoints:
