@@ -92,36 +92,6 @@
       <version>2.6.0</version>
     </dependency>
     <dependency>
-        <groupId>com.google.api-ads</groupId>
-        <artifactId>google-ads</artifactId>
-        <version>40.0.0</version> <!-- or latest version -->
-        <exclusions>
-            <exclusion>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-            </exclusion>
-            <exclusion>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-            </exclusion>
-        </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.google.api-ads</groupId>
-      <artifactId>ads-lib</artifactId>
-      <version>	5.7.0</version>
-      <exclusions>
-        <exclusion>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </exclusion>
-        <exclusion>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <version>5.20.0</version>
